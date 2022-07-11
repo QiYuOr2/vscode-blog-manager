@@ -1,0 +1,78 @@
+{
+  "name": "blog-manager",
+  "displayName": "Blog Manager",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.69.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "blog-manager.openFile",
+        "title": "打开文件"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "blog-manager",
+          "title": "文章管理",
+          "icon": "assets/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "blog-manager": [
+        {
+          "id": "source",
+          "name": "所有文章"
+        },
+        {
+          "id": "category",
+          "name": "分类"
+        },
+        {
+          "id": "tag",
+          "name": "标签"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "source",
+        "contents": "请打开文章目录\n[Open Folder](command:workbench.action.files.openFileFolder)\n[Open Workspace from File](command:workbench.action.openWorkspace)\n",
+        "when": "workbenchState == empty"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.69.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
+    "@vscode/test-electron": "^2.1.5",
+    "eslint": "^8.18.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "front-matter": "^4.0.2"
+  }
+}
