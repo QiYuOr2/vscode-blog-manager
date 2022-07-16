@@ -1,8 +1,12 @@
 {
   "name": "blog-manager",
   "displayName": "Blog Manager",
-  "description": "",
-  "version": "0.0.1",
+  "description": "博客文章管理插件",
+  "publisher": "qiyuor2",
+  "repository": {
+    "url": "https://github.com/QiYuOr2/vscode-blog-manager"
+  },
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.69.0"
   },
@@ -18,6 +22,10 @@
       {
         "command": "blog-manager.openFile",
         "title": "打开文件"
+      },
+      {
+        "command": "blog-manager.resetPath",
+        "title": "选择目录"
       }
     ],
     "viewsContainers": {
@@ -48,10 +56,27 @@
     "viewsWelcome": [
       {
         "view": "source",
-        "contents": "请打开文章目录\n[Open Folder](command:workbench.action.files.openFileFolder)\n[Open Workspace from File](command:workbench.action.openWorkspace)\n",
-        "when": "workbenchState == empty"
+        "contents": "请打开文章目录\n[打开文件夹](command:blog-manager.resetPath)\n",
+        "when": "blog-manager.showWelcome == true"
+      },
+      {
+        "view": "category",
+        "contents": "请打开文章目录\n[打开文件夹](command:blog-manager.resetPath)\n",
+        "when": "blog-manager.showWelcome == true"
+      },
+      {
+        "view": "tag",
+        "contents": "请打开文章目录\n[打开文件夹](command:blog-manager.resetPath)\n",
+        "when": "blog-manager.showWelcome == true"
       }
-    ]
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "blog-manager.resetPath"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

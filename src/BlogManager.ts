@@ -7,10 +7,7 @@ const fm = require("front-matter");
 class Node extends vscode.TreeItem {
   children?: Node[];
   constructor(label: string, children?: Node[]) {
-    super(
-      label,
-      children === undefined ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Expanded
-    );
+    super(label, children === undefined ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Expanded);
     this.children = children;
   }
 }
@@ -18,21 +15,26 @@ class Node extends vscode.TreeItem {
 class FileModel {
   public fileList: Record<string, string | any>[] = [];
   constructor(path: string) {
-    const files = glob.sync(join(path, "**/*.md"));
+    const files = glob.sync(join(path, "!(node_modules)/**/*.md"));
     files.forEach((item) => {
       const frontMatter = fm(readFileSync(item, "utf-8"));
 
-      this.fileList.push({
-        ...frontMatter.attributes,
-        path: item,
-        label: frontMatter.attributes.title,
-        resourceUri: vscode.Uri.parse(item),
-      });
+      frontMatter.attributes &&
+        frontMatter.attributes.title &&
+        this.fileList.push({
+          ...frontMatter.attributes,
+          path: item,
+          label: frontMatter.attributes.title,
+          resourceUri: vscode.Uri.parse(item),
+        });
+      if (this.fileList.length > 0) {
+        vscode.commands.executeCommand("setContext", "blog-manager.showWelcome", false);
+      }
     });
   }
 
   list(): vscode.ProviderResult<Node[]> {
-    throw new Error("为实现");
+    throw new Error("未实现");
   }
 }
 
@@ -111,9 +113,14 @@ class TreeDataProvider implements vscode.TreeDataProvider<Node> {
 export class BlogManager {
   output: vscode.OutputChannel;
   constructor(context: vscode.ExtensionContext) {
+    vscode.commands.executeCommand("setContext", "blog-manager.showWelcome", true);
     this.output = vscode.window.createOutputChannel("Blog Manager");
     vscode.commands.registerCommand("blog-manager.openFile", (uri) => {
       vscode.window.showTextDocument(uri);
+    });
+    vscode.commands.registerCommand("blog-manager.resetPath", () => {
+      context.globalState.update("BLOG_PATH", "");
+      vscode.commands.executeCommand("workbench.action.files.openFileFolder");
     });
 
     let path: string | undefined = context.globalState.get("BLOG_PATH");
@@ -123,11 +130,16 @@ export class BlogManager {
       context.globalState.update("BLOG_PATH", path);
     }
 
-    this.output.appendLine(path);
+    this.output.appendLine(`缓存目录：${path}`);
+
+    if (!path) {
+      return;
+    }
 
     const sourceTreeDataProvider = new TreeDataProvider(new SourceFileModel(path));
     const categoryTreeDataProvider = new TreeDataProvider(new CategoryFileModel(path));
     const tagTreeDataProvider = new TreeDataProvider(new TagFileModel(path));
+
     const sourceViews = vscode.window.createTreeView("source", {
       treeDataProvider: sourceTreeDataProvider,
     });
@@ -138,8 +150,6 @@ export class BlogManager {
       treeDataProvider: tagTreeDataProvider,
     });
 
-    context.subscriptions.push(sourceViews);
-    context.subscriptions.push(categoryViews);
-    context.subscriptions.push(tagViews);
+    context.subscriptions.push(sourceViews, categoryViews, tagViews);
   }
 }
