@@ -112,16 +112,14 @@ class TreeDataProvider implements vscode.TreeDataProvider<Node> {
 
 export class BlogManager {
   output: vscode.OutputChannel;
+  context: vscode.ExtensionContext;
+
   constructor(context: vscode.ExtensionContext) {
     vscode.commands.executeCommand("setContext", "blog-manager.showWelcome", true);
     this.output = vscode.window.createOutputChannel("Blog Manager");
-    vscode.commands.registerCommand("blog-manager.openFile", (uri) => {
-      vscode.window.showTextDocument(uri);
-    });
-    vscode.commands.registerCommand("blog-manager.resetPath", () => {
-      context.globalState.update("BLOG_PATH", "");
-      vscode.commands.executeCommand("workbench.action.files.openFileFolder");
-    });
+    this.context = context;
+
+    this.registerCommand();
 
     let path: string | undefined = context.globalState.get("BLOG_PATH");
 
@@ -151,5 +149,17 @@ export class BlogManager {
     });
 
     context.subscriptions.push(sourceViews, categoryViews, tagViews);
+  }
+
+  registerCommand() {
+    const openFile = vscode.commands.registerCommand("blog-manager.openFile", (uri) => {
+      vscode.window.showTextDocument(uri);
+    });
+    const resetPath = vscode.commands.registerCommand("blog-manager.resetPath", () => {
+      this.context.globalState.update("BLOG_PATH", "");
+      vscode.commands.executeCommand("workbench.action.files.openFileFolder");
+    });
+
+    this.context.subscriptions.push(openFile, resetPath);
   }
 }
