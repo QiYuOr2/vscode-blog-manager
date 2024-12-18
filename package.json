@@ -8,7 +8,7 @@
   },
   "version": "1.0.0",
   "engines": {
-    "vscode": "^1.69.0"
+    "vscode": "^1.96.0"
   },
   "categories": [
     "Other"
@@ -42,7 +42,7 @@
     "views": {
       "blog-manager": [
         {
-          "id": "source",
+          "id": "articles",
           "name": "所有文章"
         },
         {
@@ -78,34 +78,49 @@
           "command": "blog-manager.resetPath"
         }
       ]
+    },
+    "configuration": {
+      "properties": {
+        "bmConfig.resource.fileMatchGlob": {
+          "type": "string",
+          "default": "!(node_modules)/**/*.md",
+          "description": "%bmConfig.resource.fileMatchGlob%"
+        }
+      }
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "webpack",
-    "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "vscode:prepublish": "pnpm run package",
+    "compile": "pnpm run check-types && pnpm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "pnpm run check-types && pnpm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/glob": "^7.2.0",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "16.x",
-    "@types/vscode": "^1.69.0",
-    "@typescript-eslint/eslint-plugin": "^5.30.0",
-    "@typescript-eslint/parser": "^5.30.0",
-    "@vscode/test-electron": "^2.1.5",
-    "eslint": "^8.18.0",
-    "glob": "^8.0.3",
-    "mocha": "^10.0.0",
-    "ts-loader": "^9.3.1",
-    "typescript": "^4.7.4",
-    "webpack": "^5.73.0",
-    "webpack-cli": "^4.10.0"
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.96.0",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "@vscode/l10n-dev": "^0.0.35",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.16.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.7.2"
   },
   "dependencies": {
-    "front-matter": "^4.0.2"
+    "@vscode/l10n": "^0.0.18",
+    "front-matter": "^4.0.2",
+    "glob": "^11.0.0"
   }
 }
