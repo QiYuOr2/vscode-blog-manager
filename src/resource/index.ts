@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import * as l10n from "@vscode/l10n";
 import { join } from "node:path";
 import fm from "front-matter";
 import { readFileSync } from "node:fs";
@@ -27,7 +26,7 @@ export class Resource {
           ...frontMatter.attributes,
           path: item,
           label: frontMatter.attributes.title,
-          resourceUri: vscode.Uri.parse(item),
+          resourceUri: vscode.Uri.file(item),
         });
       }
 
@@ -49,7 +48,7 @@ export class Resource {
     return this.articles.reduce<Record<string, Article[]>>((result, current) => {
       // 未设置标签
       if (!current.tags) {
-        result[l10n.t("noTag")] = tryPush(result[l10n.t("noTag")], current);
+        result[vscode.l10n.t("noTag")] = tryPush(result[vscode.l10n.t("noTag")], current);
         return result;
       }
 
@@ -71,7 +70,7 @@ export class Resource {
         ? //
           (result[current.category] = tryPush(result[current.category], current))
         : //
-          (result[l10n.t("noCategory")] = tryPush(result[l10n.t("noCategory")], current));
+          (result[vscode.l10n.t("noCategory")] = tryPush(result[vscode.l10n.t("noCategory")], current));
 
       return result;
     }, {});

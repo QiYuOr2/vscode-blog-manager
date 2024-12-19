@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import * as l10n from "@vscode/l10n";
 import { globalConfig } from "./config";
 import { TreeDataProvider } from "./views/tree";
 import { Resource } from "./resource";
@@ -12,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   initCommands(context);
 
-  let path: string | undefined = context.globalState.get("BLOG_PATH");
+  let path: string | undefined = context.globalState.get(BLOG_PATH);
 
   if (!path) {
     path = vscode.workspace.workspaceFolders?.[0].uri.path || "";
