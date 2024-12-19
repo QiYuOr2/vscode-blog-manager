@@ -4,7 +4,17 @@ All notable changes to the "blog-manager" extension will be documented in this f
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
+## [1.0.1]
+
+### Fixed
+
+- Windows 下无法使用
+
+## [1.0.0]
+
+### Added
+
+- 打开文件
 
 ## [0.0.1] - 2022-07-13
 

@@ -90,6 +90,7 @@
     }
   },
   "scripts": {
+    "publish": "pnpm vsce publish --no-dependencies",
     "vscode:prepublish": "pnpm run package",
     "compile": "pnpm run check-types && pnpm run lint && node esbuild.js",
     "watch": "npm-run-all -p watch:*",
