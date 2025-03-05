@@ -1,7 +1,8 @@
 import * as vscode from "vscode";
 import { BLOG_PATH } from "../utils/constants";
+import { TreeDataProvider } from "../views/tree";
 
-export function initCommands(context: vscode.ExtensionContext) {
+export function registerInitCommands(context: vscode.ExtensionContext) {
   const openFile = vscode.commands.registerCommand("blog-manager.openFile", (uri) => {
     vscode.window.showTextDocument(uri);
   });
@@ -11,4 +12,10 @@ export function initCommands(context: vscode.ExtensionContext) {
   });
 
   context.subscriptions.push(openFile, resetPath);
+}
+
+export function registerRefreshCommand(context: vscode.ExtensionContext, action: () => void) {
+  const refresh = vscode.commands.registerCommand("blog-manager.refresh", action);
+
+  context.subscriptions.push(refresh);
 }

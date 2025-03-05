@@ -10,13 +10,12 @@
   "engines": {
     "vscode": "^1.96.0"
   },
+  "l10n": "./l10n",
   "categories": [
     "Other"
   ],
   "activationEvents": [
-    "onView:source",
-    "onView:category",
-    "onView:tag"
+    "onView:source"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -28,6 +27,14 @@
       {
         "command": "blog-manager.resetPath",
         "title": "选择目录"
+      },
+      {
+        "command": "blog-manager.refresh",
+        "title": "刷新",
+        "icon": {
+          "light": "assets/refresh.svg",
+          "dark": "assets/refresh-dark.svg"
+        }
       }
     ],
     "viewsContainers": {
@@ -76,6 +83,10 @@
       "view/title": [
         {
           "command": "blog-manager.resetPath"
+        },
+        {
+          "command": "blog-manager.refresh",
+          "icon": "assets/refresh.svg"
         }
       ]
     },

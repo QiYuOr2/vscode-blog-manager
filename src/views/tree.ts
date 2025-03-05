@@ -25,7 +25,7 @@ export class TreeDataProvider implements vscode.TreeDataProvider<Node> {
         : {
             command: "blog-manager.openFile",
             arguments: [element.resourceUri],
-            title: "打开文章",
+            title: vscode.l10n.t("openFile"),
           },
     };
   }
@@ -40,5 +40,12 @@ export class TreeDataProvider implements vscode.TreeDataProvider<Node> {
 
   getChildren(element?: Node | undefined): vscode.ProviderResult<Node[]> {
     return element === undefined ? this.toTreeData(this.resource.toList(this.groupBy)) : element.children;
+  }
+
+  private _onDidChangeTreeData: vscode.EventEmitter<undefined | null | void> = new vscode.EventEmitter<undefined | null | void>();
+  readonly onDidChangeTreeData: vscode.Event<undefined | null | void> = this._onDidChangeTreeData.event;
+
+  refresh(): void {
+    this._onDidChangeTreeData.fire();
   }
 }

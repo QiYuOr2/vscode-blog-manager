@@ -9,10 +9,12 @@ import { tryPush } from "../utils/array";
 
 export class Resource {
   articles: Article[] = [];
+  path = '';
 
-  constructor() {}
+  constructor(private readonly context: vscode.ExtensionContext) {}
 
   load(path: string) {
+    this.path = path;
     const globPath = join(path, globalConfig.fileMatchGlob())
       //处理 windows 路径
       .replaceAll("\\", "/");
@@ -34,6 +36,11 @@ export class Resource {
         vscode.commands.executeCommand("setContext", "blog-manager.showWelcome", false);
       }
     });
+  }
+
+  reload() {
+    this.articles = [];
+    this.load(this.path);
   }
 
   toList(groupBy: GroupBy) {
