@@ -62,7 +62,7 @@
     },
     "viewsWelcome": [
       {
-        "view": "source",
+        "view": "articles",
         "contents": "请打开文章目录\n[打开文件夹](command:blog-manager.resetPath)\n",
         "when": "blog-manager.showWelcome == true"
       },
