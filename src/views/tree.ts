@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { Resource } from "../resource";
-import { GroupBy } from "../types";
+import { Article, GroupBy } from "../types";
+import { buildDateGroupTree, type DateGroups } from "../utils/date-group";
 
 class Node extends vscode.TreeItem {
   children?: Node[];
@@ -39,7 +40,26 @@ export class TreeDataProvider implements vscode.TreeDataProvider<Node> {
   }
 
   getChildren(element?: Node | undefined): vscode.ProviderResult<Node[]> {
-    return element === undefined ? this.toTreeData(this.resource.toList(this.groupBy)) : element.children;
+    if (element !== undefined) {
+      return element.children;
+    }
+
+    if (this.groupBy === GroupBy.DATE) {
+      return this.toDateNodes(this.resource.toDateList());
+    }
+
+    return this.toTreeData(this.resource.toList(this.groupBy));
+  }
+
+  private toDateNodes(groups: DateGroups<Article>): Node[] {
+    return buildDateGroupTree(groups, vscode.l10n.t("noDate")).map((node) => {
+      if ("months" in node) {
+        const months = node.months.map((month) => new Node(month.label, month.articles as unknown as Node[]));
+        return new Node(node.label, months);
+      }
+
+      return new Node(node.label, node.articles as unknown as Node[]);
+    });
   }
 
   private _onDidChangeTreeData: vscode.EventEmitter<undefined | null | void> = new vscode.EventEmitter<undefined | null | void>();

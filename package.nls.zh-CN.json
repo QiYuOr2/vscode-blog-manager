@@ -1,3 +1,4 @@
 {
-  "bmConfig.resource.fileMatchGlob": "文件匹配规则"
+  "bmConfig.resource.fileMatchGlob": "文件匹配规则",
+  "bmConfig.group.dateField": "按日期分组使用的 front matter 字段名"
 }
