@@ -4,43 +4,58 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-            "label": "watch",
-            "dependsOn": [
-                "npm: watch:tsc",
-                "npm: watch:esbuild"
-            ],
-            "presentation": {
-                "reveal": "never"
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "type": "npm",
-            "script": "watch:esbuild",
-            "group": "build",
-            "problemMatcher": "$esbuild-watch",
-            "isBackground": true,
-            "label": "npm: watch:esbuild",
-            "presentation": {
-                "group": "watch",
-                "reveal": "never"
-            }
-        },
+			"label": "watch",
+			"dependsOn": [
+				"npm: watch:tsc",
+				"npm: watch:pack"
+			],
+			"presentation": {
+				"reveal": "never"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
 		{
-            "type": "npm",
-            "script": "watch:tsc",
-            "group": "build",
-            "problemMatcher": "$tsc-watch",
-            "isBackground": true,
-            "label": "npm: watch:tsc",
-            "presentation": {
-                "group": "watch",
-                "reveal": "never"
-            }
-        },
+			"type": "npm",
+			"script": "watch:pack",
+			"group": "build",
+			"problemMatcher": {
+				"owner": "vp-pack",
+				"fileLocation": "relative",
+				"pattern": {
+					"regexp": "^(.*):(\\d+):(\\d+):\\s+(.*)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"message": 4
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "Build start|rebuilding\\.\\.\\.",
+					"endsPattern": "Rebuilt in \\d+ms\\."
+				}
+			},
+			"isBackground": true,
+			"label": "npm: watch:pack",
+			"presentation": {
+				"group": "watch",
+				"reveal": "never"
+			}
+		},
+		{
+			"type": "npm",
+			"script": "watch:tsc",
+			"group": "build",
+			"problemMatcher": "$tsc-watch",
+			"isBackground": true,
+			"label": "npm: watch:tsc",
+			"presentation": {
+				"group": "watch",
+				"reveal": "never"
+			}
+		},
 		{
 			"type": "npm",
 			"script": "watch-tests",

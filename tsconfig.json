@@ -16,5 +16,9 @@
 		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
 		// "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
 		// "noUnusedParameters": true,  /* Report errors on unused parameters. */
-	}
+	},
+	// Specs are typechecked by tsconfig.vitest.json (bundler resolution). Leaving them
+	// in this program would emit CJS into out/ and break on vitest's ESM types.
+	"include": ["src"],
+	"exclude": ["src/**/*.spec.ts"]
 }
