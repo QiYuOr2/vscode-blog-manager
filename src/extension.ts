@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import * as l10n from "@vscode/l10n";
 import { globalConfig } from "./config";
 import { TreeDataProvider } from "./views/tree";
 import { Resource } from "./resource";

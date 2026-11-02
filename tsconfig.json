@@ -16,5 +16,10 @@
 		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
 		// "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
 		// "noUnusedParameters": true,  /* Report errors on unused parameters. */
-	}
+	},
+	// Specs and vite.config.ts are typechecked via tsconfig.vitest.json.
+	// This program is what `tsc -p . --outDir out` emits for mocha. Specs stay out
+	// so that emit does not compile vitest's ESM types as CJS.
+	"include": ["src"],
+	"exclude": ["src/**/*.spec.ts"]
 }

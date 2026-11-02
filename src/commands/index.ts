@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import { BLOG_PATH } from "../utils/constants";
-import { TreeDataProvider } from "../views/tree";
 
 export function registerInitCommands(context: vscode.ExtensionContext) {
   const openFile = vscode.commands.registerCommand("blog-manager.openFile", (uri) => {

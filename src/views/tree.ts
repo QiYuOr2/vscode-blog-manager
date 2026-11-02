@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { Resource } from "../resource";
-import { Article, GroupBy } from "../types";
+import { GroupBy } from "../types";
 
 class Node extends vscode.TreeItem {
   children?: Node[];

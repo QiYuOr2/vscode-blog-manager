@@ -5,10 +5,12 @@ node_modules/**
 src/**
 .gitignore
 .yarnrc
-esbuild.js
+vite.config.ts
+tsconfig.vitest.json
+shims/**
 vsc-extension-quickstart.md
 **/tsconfig.json
-**/eslint.config.mjs
+**/tsconfig.*.json
 **/*.map
 **/*.ts
 **/.vscode-test.*
