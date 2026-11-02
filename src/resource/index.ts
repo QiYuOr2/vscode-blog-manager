@@ -6,6 +6,7 @@ import { glob } from "glob";
 import { Article, GroupBy, MarkdownFrontMatter } from "../types";
 import { globalConfig } from "../config";
 import { tryPush } from "../utils/array";
+import { groupArticlesByDate } from "../utils/date-group";
 
 export class Resource {
   articles: Article[] = [];
@@ -43,12 +44,19 @@ export class Resource {
     this.load(this.path);
   }
 
-  toList(groupBy: GroupBy) {
+  // 分类和标签是一层分组。按日期是年/月两层，走 toDateList，不进这个映射。
+  toList(groupBy: Exclude<GroupBy, GroupBy.DATE>) {
     return {
       [GroupBy.NONE]: () => this.articles,
       [GroupBy.TAG]: () => this.toTagList(),
       [GroupBy.CATEGORY]: () => this.toCategoryList(),
     }[groupBy]();
+  }
+
+  // 只在内存里按年/月分组，不移动、重命名或改写文章文件。
+  toDateList() {
+    const field = globalConfig.dateField();
+    return groupArticlesByDate(this.articles, (article) => (article as Article & Record<string, unknown>)[field]);
   }
 
   toTagList() {

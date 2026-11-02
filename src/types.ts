@@ -4,6 +4,7 @@ export type MarkdownFrontMatter = {
   title: string;
   tags: string[];
   category: string;
+  date?: unknown;
 };
 
 export type Article = MarkdownFrontMatter & {
@@ -15,5 +16,6 @@ export type Article = MarkdownFrontMatter & {
 export enum GroupBy {
   NONE,
   TAG,
-  CATEGORY
+  CATEGORY,
+  DATE
 }

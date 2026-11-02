@@ -4,7 +4,7 @@ import { TreeDataProvider } from "./views/tree";
 import { Resource } from "./resource";
 import { GroupBy } from "./types";
 import { registerInitCommands, registerRefreshCommand } from "./commands";
-import { BLOG_PATH } from "./utils/constants";
+import { BLOG_PATH, ConfigKey } from "./utils/constants";
 
 export function activate(context: vscode.ExtensionContext) {
   vscode.commands.executeCommand("setContext", "blog-manager.showWelcome", true);
@@ -21,6 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   output.appendLine(`缓存目录: ${path}`);
   output.appendLine(`匹配规规则: ${globalConfig.fileMatchGlob()}`);
+  output.appendLine(`日期字段: ${globalConfig.dateField()}`);
 
   if (!path) {
     return;
@@ -33,6 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   const categoryTreeDataProvider = new TreeDataProvider(resource, GroupBy.CATEGORY);
   const tagTreeDataProvider = new TreeDataProvider(resource, GroupBy.TAG);
+  const dateTreeDataProvider = new TreeDataProvider(resource, GroupBy.DATE);
 
   const allArticleView = vscode.window.createTreeView("articles", {
     treeDataProvider: allArticleTreeDataProvider,
@@ -43,12 +45,22 @@ export function activate(context: vscode.ExtensionContext) {
   const tagView = vscode.window.createTreeView("tag", {
     treeDataProvider: tagTreeDataProvider,
   });
+  const dateView = vscode.window.createTreeView("date", {
+    treeDataProvider: dateTreeDataProvider,
+  });
 
-  context.subscriptions.push(allArticleView, categoryView, tagView);
+  context.subscriptions.push(allArticleView, categoryView, tagView, dateView);
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration((event) => {
+      if (event.affectsConfiguration(`${ConfigKey.PARTS__GROUP}.${ConfigKey.ITEM__DATE_FIELD}`)) {
+        dateTreeDataProvider.refresh();
+      }
+    }),
+  );
 
   registerRefreshCommand(context, () => {
     resource.reload();
-    [allArticleTreeDataProvider, categoryTreeDataProvider, tagTreeDataProvider].forEach((provider) => provider.refresh());
+    [allArticleTreeDataProvider, categoryTreeDataProvider, tagTreeDataProvider, dateTreeDataProvider].forEach((provider) => provider.refresh());
   });
 }
 

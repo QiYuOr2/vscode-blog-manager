@@ -57,6 +57,10 @@
         {
           "id": "tag",
           "name": "标签"
+        },
+        {
+          "id": "date",
+          "name": "按日期"
         }
       ]
     },
@@ -73,6 +77,11 @@
       },
       {
         "view": "tag",
+        "contents": "请打开文章目录\n[打开文件夹](command:blog-manager.resetPath)\n",
+        "when": "blog-manager.showWelcome == true"
+      },
+      {
+        "view": "date",
         "contents": "请打开文章目录\n[打开文件夹](command:blog-manager.resetPath)\n",
         "when": "blog-manager.showWelcome == true"
       }
@@ -94,6 +103,11 @@
           "type": "string",
           "default": "!(node_modules)/**/*.md",
           "description": "%bmConfig.resource.fileMatchGlob%"
+        },
+        "bmConfig.group.dateField": {
+          "type": "string",
+          "default": "date",
+          "description": "%bmConfig.group.dateField%"
         }
       }
     }
