@@ -50,6 +50,12 @@ export default defineConfig({
   },
   lint: {
     ignorePatterns: ["dist/**", "out/**", "node_modules/**"],
+    options: {
+      // tsgolint / TypeScript 7。vp check 和 vp lint 都会走这条路径。
+      // 没有 baseUrl，tsgolint 不会跳过 type check。
+      typeAware: true,
+      typeCheck: true,
+    },
     rules: {
       curly: "warn",
       eqeqeq: "warn",
